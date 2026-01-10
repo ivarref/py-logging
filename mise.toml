@@ -1,0 +1,9 @@
+[tools]
+python = { version = "3.13.11" }
+watchexec = { version = "2.3.2" }
+
+[tasks.demo]
+run = 'watchexec -e py --on-busy-update=restart --clear=reset --stop-signal=SIGINT -- ./demo.sh'
+
+[env]
+_.python.venv = { path = ".venv", create = true }
