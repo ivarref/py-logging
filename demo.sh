@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
 
-./log2.py --producer
-# \
-#| env IS_CONSUMER='true' ./log2.py
-#| grep -v '^12345678901234567890123456789012345678901234567890123456789012345678901234567890$'
+python3 -u ./log2.py --producer | env IS_CONSUMER='true' python3 -u ./log2.py
 #
