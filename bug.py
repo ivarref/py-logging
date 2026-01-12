@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 import sys
-import fileinput
 import multiprocessing as mp
 from concurrent.futures import ProcessPoolExecutor
-import os
 import logging
 
 big_line = '*' * 1000
@@ -38,7 +36,7 @@ def run_consumer():
     bad_line_count = 0
     ok_line_count = 0
     try:
-        for line in fileinput.input():
+        for line in sys.stdin:
             line = line.strip()
             all_stars = '*' * len(line)
             if line == all_stars:
@@ -55,7 +53,9 @@ def run_consumer():
         pass
     finally:
         try:
-            print(f'Consumer exiting! Bad line count: {bad_line_count:_}, ok count: {ok_line_count:_}', flush=True)
+            print('Consumer exiting', flush=True)
+            print(f'OK line count: {ok_line_count:_}', flush=True)
+            print(f'Bad line count: {bad_line_count:_}', flush=True)
         except BrokenPipeError:
             pass
 
@@ -63,8 +63,8 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stdout)
     if '--producer' in sys.argv:
         run_producer()
-    elif 'IS_CONSUMER' in os.environ:
+    elif '--consumer' in sys.argv:
         run_consumer()
     else:
-        print('unknown mode, exiting', flush=True)
+        print('Unknown mode, exiting', flush=True)
         sys.exit(1)
