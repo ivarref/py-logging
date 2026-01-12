@@ -4,7 +4,7 @@ import multiprocessing as mp
 from concurrent.futures import ProcessPoolExecutor
 import logging
 
-big_line = '*' * 1000
+big_line = '*' * 10_000
 
 def single_producer():
     logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stdout)
@@ -35,25 +35,28 @@ def run_producer():
 def run_consumer():
     bad_line_count = 0
     ok_line_count = 0
+    total_lines = 0
     try:
         for line in sys.stdin:
             line = line.strip()
+            total_lines += 1
             all_stars = '*' * len(line)
             if line == all_stars:
                 if len(line) == len(big_line):
                     ok_line_count += 1
                 else:
                     bad_line_count += 1
-                    print(f'Got garbled star line with length {len(line):_}')
             else:
                 print(f'Got unexpected line: {line}', flush=True)
                 sys.exit(1)
+            if total_lines % 10_000 == 0:
+                msg = f'OK line count: {ok_line_count:_}, garbled line count: {bad_line_count:_}'
+                print(msg, flush=True)
         print('Stdin closed', flush=True)
     except BrokenPipeError:
         pass
     except KeyboardInterrupt:
         print('Consumer received KeyboardInterrupt', flush=True)
-        pass
     finally:
         try:
             print('Consumer exiting', flush=True)

@@ -1,12 +1,9 @@
 [tools]
-python = { version = "3.13.11" }
+python = { version = "3.14.2" }
 watchexec = { version = "2.3.2" }
 
 [tasks.bug]
-run = '''
-#/usr/bin/env bash
-python3 -u ./bug.py --producer | python3 -u ./bug.py --consumer
-'''
+run = './bug.sh'
 
 [env]
 _.python.venv = { path = ".venv", create = true }
