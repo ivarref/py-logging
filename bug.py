@@ -47,6 +47,7 @@ def run_consumer():
                     print(f'Got garbled star line with length {len(line):_}')
             else:
                 print(f'Got unexpected line: {line}', flush=True)
+                sys.exit(1)
     except BrokenPipeError:
         pass
     except KeyboardInterrupt:
