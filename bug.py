@@ -48,9 +48,11 @@ def run_consumer():
             else:
                 print(f'Got unexpected line: {line}', flush=True)
                 sys.exit(1)
+        print('Stdin closed', flush=True)
     except BrokenPipeError:
         pass
     except KeyboardInterrupt:
+        print('Consumer received KeyboardInterrupt', flush=True)
         pass
     finally:
         try:
