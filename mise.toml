@@ -1,9 +1,18 @@
 [tools]
 python = { version = "3.14.2" }
-watchexec = { version = "2.3.2" }
+
+[tasks.setup-venv]
+description = 'Setup virtual env.'
+run = 'rm -rf .venv'
+sources = ['mise.toml']
 
 [tasks.bug]
+depends = ['setup-venv']
 run = './bug.sh'
+
+[tasks.fix]
+depends = ['setup-venv']
+run = './fix.sh'
 
 [env]
 _.python.venv = { path = ".venv", create = true }

@@ -37,6 +37,7 @@ def run_consumer():
     ok_line_count = 0
     total_lines = 0
     try:
+        print(f'Line length is {len(big_line):_}', flush=True)
         for line in sys.stdin:
             line = line.strip()
             total_lines += 1
