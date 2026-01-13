@@ -19,14 +19,14 @@ def init_logger(log_lock):
     handler = MultiProcessingStreamHandler(log_lock)
     logging.basicConfig(level=logging.INFO, format="%(message)s", force=True, handlers=[handler])
 
-def run_producer(log_lock):
+def run_producer():
     mp_context = mp.get_context("forkserver")
     futures = []
     max_workers = 8
     try:
         with ProcessPoolExecutor(max_workers,
                                  initializer=init_logger,
-                                 initargs=(log_lock,),
+                                 initargs=(mp_context.RLock(),),
                                  mp_context=mp_context) as executor:
             for _ in range(max_workers):
                 fut = executor.submit(single_producer)
@@ -75,7 +75,7 @@ def run_consumer():
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stdout)
     if '--producer' in sys.argv:
-        run_producer(mp.RLock())
+        run_producer()
     elif '--consumer' in sys.argv:
         run_consumer()
     else:
