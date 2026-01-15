@@ -20,7 +20,7 @@ def single_producer():
         pass
 
 def init_logger(log_lock):
-    handler = MultiProcessingStreamHandler(log_lock)
+    handler = MultiProcessingStreamHandler(log_lock, stream=sys.stdout)
     logging.basicConfig(level=logging.INFO, format="%(message)s", force=True, handlers=[handler])
 
 def run_producer():
@@ -101,7 +101,7 @@ class MultiProcessingStreamHandler(logging.Handler):
 
     terminator = "\n"
 
-    def __init__(self, multiprocess_lock, stream=sys.stdout):  # no test coverage
+    def __init__(self, multiprocess_lock, stream=sys.stdout):
         """
         Initialize the handler.
 
@@ -112,7 +112,7 @@ class MultiProcessingStreamHandler(logging.Handler):
         self.multiprocess_lock = multiprocess_lock
         self.stream = stream
 
-    def flush(self):  # no test coverage
+    def flush(self):
         """
         Flushes the stream.
         """
@@ -121,7 +121,7 @@ class MultiProcessingStreamHandler(logging.Handler):
                 if self.stream and hasattr(self.stream, "flush"):
                     self.stream.flush()
 
-    def emit(self, record):  # no test coverage
+    def emit(self, record):
         """
         Emit a record.
 
@@ -144,7 +144,7 @@ class MultiProcessingStreamHandler(logging.Handler):
         except Exception:
             self.handleError(record)
 
-    def setStream(self, stream):  # no test coverage
+    def setStream(self, stream):
         """
         Sets the StreamHandler's stream to the specified value,
         if it is different.
@@ -161,7 +161,7 @@ class MultiProcessingStreamHandler(logging.Handler):
                 self.stream = stream
         return result
 
-    def __repr__(self):  # no test coverage
+    def __repr__(self):
         level = getLevelName(self.level)
         name = getattr(self.stream, "name", "")
         #  bpo-36015: name can be an int
