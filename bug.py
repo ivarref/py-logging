@@ -3,8 +3,12 @@ import sys
 import multiprocessing as mp
 from concurrent.futures import ProcessPoolExecutor
 import logging
+import time
 
 big_line = '*' * 10_000
+
+def current_milli_time():
+    return time.time_ns() // 1_000_000
 
 def single_producer():
     logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stdout)
@@ -36,6 +40,7 @@ def run_consumer():
     bad_line_count = 0
     ok_line_count = 0
     total_lines = 0
+    start_time = current_milli_time()
     try:
         print(f'Line length is {len(big_line):_}', flush=True)
         for line in sys.stdin:
@@ -51,7 +56,9 @@ def run_consumer():
                 print(f'Got unexpected line: {line}', flush=True)
                 sys.exit(1)
             if total_lines % 10_000 == 0:
-                msg = f'OK line count: {ok_line_count:_}, garbled line count: {bad_line_count:_}'
+                spent_ms = current_milli_time() - start_time
+                lines_per_ms = total_lines // spent_ms
+                msg = f'OK line count: {ok_line_count:_}, garbled line count: {bad_line_count:_}, lines/ms: {lines_per_ms:_}'
                 print(msg, flush=True)
         print('Stdin closed', flush=True)
     except BrokenPipeError:
@@ -67,6 +74,7 @@ def run_consumer():
             pass
 
 if __name__ == "__main__":
+    mp.set_start_method("forkserver")
     logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stdout)
     if '--producer' in sys.argv:
         run_producer()
