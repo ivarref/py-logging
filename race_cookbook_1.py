@@ -93,6 +93,9 @@ def worker_process(producer_id, queue, configurer):
 # then send a None to the queue to tell the listener to finish.
 def main():
     multiprocessing.set_start_method("forkserver")
+    if os.path.exists('./output.txt'):
+        os.remove('./output.txt')
+        print('Removed ./output.txt', flush=True)
     queue = multiprocessing.Queue(-1)
     listener = multiprocessing.Process(target=listener_process,
                                        args=(queue, listener_configurer))
