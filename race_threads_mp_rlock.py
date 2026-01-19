@@ -18,7 +18,7 @@ def single_producer(thread_id):
         last_s = 0
         total_lines = 0
         spent_ms = 0
-        while spent_s < 5:
+        while spent_s < 60:
             for x in range(10_000):
                 logging.log(logging.INFO, big_line)
             total_lines += 10_000
