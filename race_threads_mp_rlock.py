@@ -137,7 +137,6 @@ class MultiProcessingStreamHandler(logging.Handler):
 
 def run_main():
     mp.set_start_method('forkserver')
-    logging.basicConfig(level=logging.INFO, format="%(message)s")
     handler = MultiProcessingStreamHandler(mp.get_context('forkserver').RLock())
     logging.basicConfig(level=logging.INFO, format="%(message)s", force=True, handlers=[handler])
     run_producer()
