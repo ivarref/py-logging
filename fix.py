@@ -63,6 +63,9 @@ def run_consumer():
                 sys.exit(1)
             if total_lines % 10_000 == 0:
                 spent_ms = current_milli_time() - start_time
+                spent_ms = spent_ms // 1000
+                if spent_ms == 0:
+                    spent_ms = 1
                 lines_per_ms = total_lines // spent_ms
                 msg = f'OK line count: {ok_line_count:_}, garbled line count: {bad_line_count:_}, lines/ms: {lines_per_ms:_}'
                 print(msg, flush=True)

@@ -8,7 +8,7 @@ PYTHON_EXECUTEABLE="${PYTHON_EXECUTEABLE:-python3}"
 echo "Using python3 located at: $(which "${PYTHON_EXECUTEABLE}")"
 echo "Version: $("${PYTHON_EXECUTEABLE}" --version)"
 
-"${PYTHON_EXECUTEABLE}" -u ./bug.py --producer | \
+python3 -u ./bug.py --producer | \
 bash -c "
 onEXIT () {
   EXIT_STATUS=\$?
@@ -18,4 +18,4 @@ onEXIT () {
 }
 
 trap onEXIT EXIT
-\"${PYTHON_EXECUTEABLE}\" -u ./bug.py --consumer"
+python3 -u ./bug.py --consumer"
