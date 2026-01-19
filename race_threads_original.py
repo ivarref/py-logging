@@ -2,6 +2,7 @@
 from concurrent.futures import ThreadPoolExecutor
 import logging
 import time
+import os
 
 big_line = '*' * 10_000
 
@@ -44,8 +45,8 @@ def run_producer():
                 spent_ms, line_count = fut.result()
                 total_ms += spent_ms
                 total_lines += line_count
-            lines_per_ms = total_lines // total_ms
-            print(f'Total lines: {total_lines:_}, lines/ms: {lines_per_ms:_}', flush=True)
+            lines_per_ms = total_lines / (total_ms / max_workers)
+            print(f'{os.path.basename(__file__)}: total lines: {total_lines:_}, total ms: {total_ms:_}, lines/ms: {lines_per_ms:.2f}', flush=True)
     except KeyboardInterrupt:
         pass
     except BrokenPipeError:
