@@ -111,5 +111,10 @@ def main():
     queue.put_nowait(None)
     listener.join()
 
+# race_cookbook_1.py: total lines: 310_793, total ms: 11_118, lines/ms: 27.95
+# + many, many errors due to full queue:
+# cat errors.txt | grep 'queue.Full' | wc -l
+# 89207
+
 if __name__ == '__main__':
     main()
