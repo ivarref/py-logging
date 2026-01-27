@@ -9,6 +9,7 @@ if __name__ == "__main__":
             lin = lin.strip()
             if lin != big_line:
                 print('error')
+                print(lin)
                 sys.exit(1)
     print('output.txt OK')
 
